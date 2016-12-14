@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import datetime
-import sys
 import grpc
 import BaseTestClass
 import dstore.engine.procedures.engineProc_pb2 as engineProc_pb2
