@@ -21,21 +21,6 @@ if __name__ == "__main__":
     parser.add_argument("--exclude", help="Regex pattern to exclude select tests. Default: None")
     args = parser.parse_args()
     include_test_filename_pattern = 'Test*.py' if not args.include else args.include
-
-    """
-    include_test_filename_pattern = '^Test.*\.py$' if not args.include else args.include
-    include_test_filename_pattern = compileRegExPattern(include_test_filename_pattern)
-    exclude_test_filename_pattern = None if not args.exclude else args.exclude
-    if(exclude_test_filename_pattern):
-        exclude_test_filename_pattern = compileRegExPattern(exclude_test_filename_pattern)
-    test_suite = unittest.TestSuite()
-    for (dirpath, dirnames, filenames) in os.walk(test_dir):
-        for filename in filenames:
-            if exclude_test_filename_pattern and exclude_test_filename_pattern.match(filename):
-                continue
-            if include_test_filename_pattern.match(filename):
-                test_suite.addTest(filename)
-    """
     os.chdir(test_dir)
     all_tests = unittest.TestLoader().discover('.', pattern=include_test_filename_pattern)
     unittest.TextTestRunner(verbosity=2).run(all_tests)
