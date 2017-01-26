@@ -3,7 +3,7 @@
 import datetime
 import grpc
 import BaseTestClass
-import dstore.engine.procedures.engineProc_pb2 as engineProc_pb2
+import dstore.engine.procedures.engine_proc_service_pb2 as engine_proc_service_pb2
 import dstore.engine.procedures.mi_GetCountries_pb2 as mi_GetCountries_pb2
 import dstore.engine.procedures.mi_DatatypeTest_Ad_pb2 as mi_DatatypeTest_Ad_pb2
 import dstore.engine.procedures.mi_GetUnits_pb2 as mi_GetUnits_pb2
@@ -13,7 +13,7 @@ from dstore.helper.DstoreMetadata import DstoreMetadata
 class CennectionTadys(BaseTestClass.BaseTestClass):
 
     def testPublicProcedureUnauthorizedShouldSucceed(self):
-        stub = engineProc_pb2.EngineProcStub(self.getUnauthorizedSecureChannel())
+        stub = engine_proc_service_pb2.EngineProcStub(self.getUnauthorizedSecureChannel())
         country_id = -1
         for result in stub.mi_GetCountries(mi_GetCountries_pb2.Parameters()):
             if len(result.row) == 0:
@@ -26,7 +26,7 @@ class CennectionTadys(BaseTestClass.BaseTestClass):
         self.assertEquals(1, country_id)
 
     def testAdminProcedureUnauthorizedShouldFail(self):
-        stub = engineProc_pb2.EngineProcStub(self.getUnauthorizedSecureChannel())
+        stub = engine_proc_service_pb2.EngineProcStub(self.getUnauthorizedSecureChannel())
         try:
             for result in stub.mi_DatatypeTest_Ad(mi_DatatypeTest_Ad_pb2.Parameters()):
                 got_valid_result = True
@@ -35,7 +35,7 @@ class CennectionTadys(BaseTestClass.BaseTestClass):
         self.assertFalse(got_valid_result)
 
     def testAdminProcedureAuthorizedShouldSucceed(self):
-        stub = engineProc_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
+        stub = engine_proc_service_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
         test_char = ''
         for result in stub.mi_DatatypeTest_Ad(mi_DatatypeTest_Ad_pb2.Parameters()):
             if len(result.row) == 0:
@@ -45,7 +45,7 @@ class CennectionTadys(BaseTestClass.BaseTestClass):
         self.assertEquals('test char', test_char)
 
     def testExecuteProcedureWithoutParameters(self):
-        stub = engineProc_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
+        stub = engine_proc_service_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
         test_char = ''
         for result in stub.mi_DatatypeTest_Ad(mi_DatatypeTest_Ad_pb2.Parameters()):
             if len(result.row) == 0:
@@ -55,7 +55,7 @@ class CennectionTadys(BaseTestClass.BaseTestClass):
         self.assertEquals('test char', test_char)
 
     def testExecuteProcedureWithParameters(self):
-        stub = engineProc_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
+        stub = engine_proc_service_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
         params = mi_DatatypeTest_Ad_pb2.Parameters()
         params.get_result_set.value = True
         test_char = ''
@@ -67,7 +67,7 @@ class CennectionTadys(BaseTestClass.BaseTestClass):
         self.assertEquals('test char', test_char)
 
     def testExecuteProcedureWithGetOutputParameters(self):
-        stub = engineProc_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
+        stub = engine_proc_service_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
         params = mi_DatatypeTest_Ad_pb2.Parameters()
         params.get_result_set.value = False
         params.set_output_params.value = True
@@ -77,7 +77,7 @@ class CennectionTadys(BaseTestClass.BaseTestClass):
         self.assertEquals('test char', test_char)
 
     def testGetAndProcessResultSet(self):
-        stub = engineProc_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
+        stub = engine_proc_service_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
         expected_dict = {'test_text': 'test text',
                          'test_bit': True,
                          'test_integer': 17,
@@ -96,7 +96,7 @@ class CennectionTadys(BaseTestClass.BaseTestClass):
         self.assertDictEqual(expected_dict, result_dict)
 
     def testGetAndProcessMessagesAfterProcedureError(self):
-        stub = engineProc_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
+        stub = engine_proc_service_pb2.EngineProcStub(self.getAuthorizedSecureChannel())
         params = mi_GetUnits_pb2.Parameters()
         params.active.value = 3
         message_list = []
